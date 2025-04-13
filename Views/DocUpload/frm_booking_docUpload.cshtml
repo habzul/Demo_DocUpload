@@ -1,0 +1,80 @@
+﻿@model IEnumerable<eRehat.Models.DocUpload>
+
+@{
+    ViewData["Title"] = "frm_booking_docUpload";
+}
+@if (TempData["Success"] != null)
+{
+    <script type="text/javascript">
+        alert('@TempData["Success"]');
+    </script>
+}
+@if (TempData["Error"] != null)
+{
+    <script type="text/javascript">
+        alert('@TempData["Error"]');
+    </script>
+}
+
+<h1>frm_booking_docUpload</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.book_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.doc_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ket_doc)
+            </th>
+            <th>
+               Uploaded File
+            </th>
+            <th>
+               Tindakan
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.book_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.doc_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ket_doc)
+            </td>
+            <td>
+                    @if (!string.IsNullOrEmpty(item.FilePath))
+                    {
+                        <a href="@Url.Content(item.FilePath)" target="_blank" class="btn btn-primary">
+                            Open File
+                        </a>
+                    }
+                    else
+                    {
+                        <span>Not Uploaded</span>
+                    }
+            </td>
+                <td>
+                    <form asp-action="frm_booking_docUpload" enctype="multipart/form-data" method="post">
+                        <input type="hidden" name="doc_id" value="@item.doc_id" />
+                        <input type="hidden" name="book_id" value="@item.book_id" />
+                        <input type="file" name="File" accept=".jpg,.png" required />
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>
